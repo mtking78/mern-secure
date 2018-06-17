@@ -29,7 +29,6 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "bootstrap": "^4.1.1",
     "gh-pages": "^1.2.0"
   }
 }

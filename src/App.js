@@ -55,9 +55,9 @@ class App extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.businesses.map(book =>
+                {this.state.businesses.map(business =>
                   <tr>
-                    <td><Link to={`/show/${business._id}`}>{business.isbn}</Link></td>
+                    <td><Link to={`/show/${business._id}`}>{business.name}</Link></td>
                     <td>{business.title}</td>
                     <td>{business.author}</td>
                     <td>{business.phone}</td>
