@@ -1,18 +1,74 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ReactDOM from 'react-dom';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      businesses: []
+    };
+  }
+
+  componentDidMount() {
+    axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
+    axios.get('/api/business')
+      .then(res => {
+        this.setState({ businesses: res.data });
+        console.log(this.state.businesses);
+      })
+      .catch((error) => {
+        if(error.response.status === 401) {
+          this.props.history.push("/login");
+        }
+      });
+  }
+
+  logout = () => {
+    localStorage.removeItem('jwtToken');
+    window.location.reload();
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div class="container">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              BUSINESS DIRECTORY &nbsp;
+              {localStorage.getItem('jwtToken') &&
+                <button class="btn btn-primary" onClick={this.logout}>Logout</button>
+              }
+            </h3>
+          </div>
+          <div class="panel-body">
+            <table class="table table-stripe">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Phone</th>
+                  <th>Link</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.businesses.map(book =>
+                  <tr>
+                    <td><Link to={`/show/${business._id}`}>{business.isbn}</Link></td>
+                    <td>{business.title}</td>
+                    <td>{business.author}</td>
+                    <td>{business.phone}</td>
+                    <td>{business.link}</td>
+                    <td>{business.description}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }
